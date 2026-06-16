@@ -1,0 +1,71 @@
+{
+  "admin": {
+    "favorites": [
+      {
+        "title": "活着",
+        "author": "余华",
+        "publisher": "作家出版社",
+        "rating": 9.4
+      },
+      {
+        "title": "三体",
+        "author": "刘慈欣",
+        "publisher": "重庆出版社",
+        "rating": 8.9
+      },
+      {
+        "title": "白夜行",
+        "author": "[日] 东野圭吾",
+        "publisher": "南海出版公司",
+        "rating": 9.2
+      },
+      {
+        "title": "百年孤独",
+        "author": "[哥伦比亚] 加西亚·马尔克斯",
+        "publisher": "南海出版公司",
+        "rating": 9.3
+      },
+      {
+        "title": "一桩事先张扬的凶杀案",
+        "author": "[哥伦比亚] 加西亚·马尔克斯",
+        "publisher": "南海出版公司",
+        "rating": 8.7
+      },
+      {
+        "title": "围城",
+        "author": "钱锺书",
+        "publisher": "人民文学出版社",
+        "rating": 9
+      }
+    ],
+    "disliked": [
+      {
+        "title": "围城",
+        "timestamp": "2026-06-15T14:25:05.432Z"
+      }
+    ]
+  },
+  "user1": {
+    "favorites": [
+      {
+        "title": "活着",
+        "author": "余华",
+        "publisher": "作家出版社",
+        "rating": 9.4
+      },
+      {
+        "title": "平凡的世界",
+        "author": "路遥",
+        "publisher": "北京十月文艺出版社",
+        "rating": 9
+      },
+      {
+        "title": "围城",
+        "author": "钱锺书",
+        "publisher": "人民文学出版社",
+        "rating": 9
+      }
+    ],
+    "disliked": []
+  }
+}
