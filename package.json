@@ -1,0 +1,29 @@
+{
+  "name": "douban-book-recommend",
+  "version": "1.0.0",
+  "description": "豆瓣图书分析与个性化 AI 推荐平台 —— 抓取→清洗→分析→可视化→推荐 全生命周期数据管线",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "scrape": "python scraper/douban_spider.py",
+    "clean": "python scraper/cleaner.py",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "douban",
+    "book",
+    "crawler",
+    "data-pipeline",
+    "recommendation",
+    "ai"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "csv-parser": "^3.2.0",
+    "express": "^5.1.0",
+    "iconv-lite": "^0.6.3",
+    "jschardet": "^3.1.4"
+  }
+}
