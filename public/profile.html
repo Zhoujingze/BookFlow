@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>个人信息管理</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/theme-listener.js"></script>
+</head>
+<body class="iframe-content">
+  <div class="profile-section">
+    <h2>个人信息管理</h2>
+    <div class="form-group">
+      <label for="name">姓名</label>
+      <input type="text" id="name" placeholder="请输入姓名">
+      
+      <label for="age">年龄</label>
+      <input type="number" id="age" placeholder="请输入年龄">
+      
+      <label for="gender">性别</label>
+      <select id="gender">
+        <option value="">请选择</option>
+        <option value="男">男</option>
+        <option value="女">女</option>
+      </select>
+      
+      <label for="email">邮箱</label>
+      <input type="email" id="email" placeholder="请输入邮箱">
+      
+      <button id="saveProfile" class="btn-primary">保存信息</button>
+    </div>
+  </div>
+  <script src="js/profile-management.js"></script>
+</body>
+</html>

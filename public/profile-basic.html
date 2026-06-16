@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>个人信息管理</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/theme-listener.js"></script>
+  <script>
+    // 确保iframe内页面也能响应主题变化
+    window.addEventListener('message', (event) => {
+      if (event.data.type === 'themeChange') {
+        document.body.classList.remove('light-theme', 'dark-theme');
+        document.body.classList.add(event.data.theme + '-theme');
+      }
+    });
+  </script>
+</head>
+<body class="iframe-content">
+  <div class="profile-section">
+    <h2>个人信息管理</h2>
+    <div class="form-group">
+      <input type="hidden" id="userId">
+      <label for="name">姓名</label>
+      <input type="text" id="name" placeholder="请输入姓名" required>
+      
+      <label for="age">年龄</label>
+      <input type="number" id="age" placeholder="请输入年龄" min="1" max="120">
+      
+      <label for="gender">性别</label>
+      <select id="gender" required>
+        <option value="">请选择</option>
+        <option value="男">男</option>
+        <option value="女">女</option>
+      </select>
+      
+      <label for="email">邮箱</label>
+      <input type="email" id="email" placeholder="请输入邮箱" required>
+      
+      <button id="saveProfile" class="btn-primary">保存信息</button>
+    </div>
+  </div>
+  <script src="js/profile-management.js"></script>
+</body>
+</html>

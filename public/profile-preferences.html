@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>偏好设置</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="iframe-content">
+  <div class="profile-section">
+    <h2>偏好设置</h2>
+    
+    <!-- 主题模式设置 -->
+    <form id="themeForm">
+      <div class="form-group">
+        <label>主题模式:</label>
+        <select name="theme" id="themeSelect">
+          <option value="light">亮色模式</option>
+          <option value="dark">暗色模式</option>
+        </select>
+      </div>
+      <button type="submit" class="btn-primary">保存主题设置</button>
+    </form>
+
+    <!-- 修改密码设置 -->
+    <form id="passwordForm">
+      <div class="form-group">
+        <label>修改密码:</label>
+        <input type="password" id="currentPassword" placeholder="当前密码">
+        <input type="password" id="newPassword" placeholder="新密码">
+        <input type="password" id="confirmPassword" placeholder="确认新密码">
+      </div>
+      <button type="submit" class="btn-primary">修改密码</button>
+    </form>
+
+    <!-- 退出登录按钮 -->
+    <button id="logoutBtn" class="logout-btn">退出登录</button>
+  </div>
+  <script src="js/profile.js"></script>
+</body>
+</html>

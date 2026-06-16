@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI图书推荐助手</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/theme-listener.js"></script>
+  <style>
+    .recommend-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .recommend-container h2 {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    /* 统计卡片 */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+      border: 1px solid #e9ecef;
+      transition: transform 0.2s;
+    }
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .stat-card .stat-number {
+      font-size: 24px;
+      font-weight: bold;
+      color: #3498db;
+    }
+    .stat-card .stat-label {
+      font-size: 12px;
+      color: #666;
+      margin-top: 4px;
+    }
+    /* 偏好设置区 */
+    .preferences-panel {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid #e9ecef;
+    }
+    .preferences-panel h3 {
+      margin: 0 0 15px 0;
+      font-size: 16px;
+      color: #333;
+    }
+    .pref-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    .pref-grid .form-row {
+      margin-bottom: 0;
+    }
+    .pref-grid input, .pref-grid select {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    .pref-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    /* 推荐结果区 */
+    .recommend-results {
+      margin-top: 20px;
+    }
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .result-header h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+    .algo-info {
+      font-size: 12px;
+      color: #888;
+      background: #f0f0f0;
+      padding: 4px 10px;
+      border-radius: 12px;
+    }
+    /* 推荐图书卡片 */
+    .book-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 18px;
+      margin-bottom: 12px;
+      border: 1px solid #e9ecef;
+      display: flex;
+      gap: 15px;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .book-card:hover {
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      border-color: #3498db;
+    }
+    .book-rank {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3498db, #2ecc71);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .book-rank.top3 {
+      background: linear-gradient(135deg, #f39c12, #e74c3c);
+    }
+    .book-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .book-title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .book-title-row .title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+    .book-rating {
+      background: #fff3cd;
+      color: #856404;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+    .book-rating.high {
+      background: #d4edda;
+      color: #155724;
+    }
+    .book-meta {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+    .book-meta span {
+      margin-right: 15px;
+    }
+    .book-reason {
+      font-size: 12px;
+      color: #3498db;
+      background: #ebf5fb;
+      padding: 4px 10px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+    .book-scores {
+      display: flex;
+      gap: 12px;
+      font-size: 11px;
+      color: #888;
+    }
+    .score-bar {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .score-bar .bar {
+      width: 60px;
+      height: 6px;
+      background: #eee;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .score-bar .bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.5s;
+    }
+    .bar-content .bar-fill { background: #3498db; }
+    .bar-collab .bar-fill { background: #e67e22; }
+    .bar-pop .bar-fill { background: #2ecc71; }
+    .bar-final .bar-fill { background: #9b59b6; }
+    .book-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-shrink: 0;
+      justify-content: center;
+    }
+    .btn-fav, .btn-dislike {
+      padding: 6px 14px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+    .btn-fav {
+      background: #3498db;
+      color: #fff;
+    }
+    .btn-fav:hover { background: #2980b9; }
+    .btn-dislike {
+      background: #f0f0f0;
+      color: #666;
+    }
+    .btn-dislike:hover { background: #e0e0e0; }
+    /* 收藏列表 */
+    .favorites-section {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 2px solid #eee;
+    }
+    .fav-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 15px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      margin-bottom: 6px;
+    }
+    .fav-item .fav-info {
+      font-size: 14px;
+    }
+    .fav-item .fav-meta {
+      font-size: 12px;
+      color: #888;
+    }
+    .btn-remove {
+      padding: 4px 10px;
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .btn-remove:hover { background: #c0392b; }
+    /* Tab切换 */
+    .tab-container {
+      display: flex;
+      gap: 0;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #eee;
+    }
+    .tab-btn {
+      padding: 10px 20px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 14px;
+      color: #666;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      color: #3498db;
+      border-bottom-color: #3498db;
+      font-weight: 600;
+    }
+    .tab-btn:hover {
+      color: #3498db;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    /* 暗色主题 */
+    .dark-theme .stat-card {
+      background: #2d2d2d;
+      border-color: #444;
+    }
+    .dark-theme .stat-card .stat-label {
+      color: #aaa;
+    }
+    .dark-theme .preferences-panel {
+      background: #2d2d2d;
+      border-color: #444;
+    }
+    .dark-theme .book-card {
+      background: #2d2d2d;
+      border-color: #444;
+    }
+    .dark-theme .book-title-row .title {
+      color: #eee;
+    }
+    .dark-theme .book-meta {
+      color: #aaa;
+    }
+    .dark-theme .book-reason {
+      background: #1a3a4a;
+      color: #5dade2;
+    }
+    .dark-theme .algo-info {
+      background: #333;
+      color: #aaa;
+    }
+    .dark-theme .fav-item {
+      background: #2d2d2d;
+    }
+    .dark-theme .tab-btn {
+      color: #aaa;
+    }
+    .dark-theme .tab-btn.active {
+      color: #5dade2;
+      border-bottom-color: #5dade2;
+    }
+    .dark-theme .btn-dislike {
+      background: #444;
+      color: #aaa;
+    }
+    /* 空状态 */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #888;
+    }
+    .empty-state .empty-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+    /* 主按钮样式 */
+    .primary-btn {
+      padding: 10px 24px;
+      background: linear-gradient(135deg, #3498db, #2ecc71);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    .primary-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+    }
+    .primary-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+  </style>
+</head>
+<body class="iframe-content">
+  <div class="recommend-container">
+    <h2>🤖 AI图书推荐助手</h2>
+
+    <!-- 统计概览 -->
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-card">
+        <div class="stat-number" id="statBooks">-</div>
+        <div class="stat-label">图书总量</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="statAvgRating">-</div>
+        <div class="stat-label">平均评分</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="statUsers">-</div>
+        <div class="stat-label">用户数量</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="statFavorites">-</div>
+        <div class="stat-label">收藏总数</div>
+      </div>
+    </div>
+
+    <!-- Tab切换 -->
+    <div class="tab-container">
+      <button class="tab-btn active" data-tab="recommend">🎯 智能推荐</button>
+      <button class="tab-btn" data-tab="favorites">⭐ 我的收藏</button>
+    </div>
+
+    <!-- 推荐Tab -->
+    <div class="tab-content active" id="tab-recommend">
+      <!-- 偏好设置 -->
+      <div class="preferences-panel">
+        <h3>📋 推荐偏好设置（可选）</h3>
+        <div class="pref-grid">
+          <div class="form-row">
+            <label>喜欢的作者</label>
+            <input type="text" id="prefAuthors" placeholder="如：东野圭吾、余华、莫言">
+          </div>
+          <div class="form-row">
+            <label>喜欢的出版社</label>
+            <input type="text" id="prefPublishers" placeholder="如：译林出版社、人民文学出版社">
+          </div>
+          <div class="form-row">
+            <label>最低评分</label>
+            <select id="prefMinRating">
+              <option value="0">不限</option>
+              <option value="7.0">7.0 以上</option>
+              <option value="7.5">7.5 以上</option>
+              <option value="8.0" selected>8.0 以上</option>
+              <option value="8.5">8.5 以上</option>
+              <option value="9.0">9.0 以上</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>推荐数量</label>
+            <select id="prefTopN">
+              <option value="5">Top 5</option>
+              <option value="10" selected>Top 10</option>
+              <option value="15">Top 15</option>
+              <option value="20">Top 20</option>
+            </select>
+          </div>
+        </div>
+        <div class="pref-actions">
+          <button id="recommendBtn" class="primary-btn">🚀 获取AI推荐</button>
+        </div>
+      </div>
+
+      <!-- 推荐结果 -->
+      <div class="recommend-results" id="recommendResults">
+        <div class="empty-state">
+          <div class="empty-icon">📚</div>
+          <p>点击"获取AI推荐"按钮，系统将基于混合推荐算法为您生成个性化书单</p>
+          <p style="font-size: 12px; margin-top: 8px;">算法融合：基于内容推荐(40%) + 协同过滤(30%) + 热度推荐(30%)</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 收藏Tab -->
+    <div class="tab-content" id="tab-favorites">
+      <div id="favoritesList">
+        <div class="empty-state">
+          <div class="empty-icon">⭐</div>
+          <p>暂无收藏图书，快去获取推荐并收藏喜欢的书吧！</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="js/book-recommend.js"></script>
+</body>
+</html>

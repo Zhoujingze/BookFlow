@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>图书分析系统</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/theme-listener.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const username = localStorage.getItem('username');
+      if (!username) {
+        window.location.href = 'login.html';
+        return;
+      }
+      const iframe = document.querySelector('iframe[name="content-frame"]');
+      iframe.src = `profile-basic.html?username=${username}`;
+      
+      // 添加iframe加载事件监听
+      iframe.addEventListener('load', function() {
+        const theme = localStorage.getItem('theme') || 'light';
+        iframe.contentWindow.postMessage({
+          type: 'themeChange',
+          theme: theme
+        }, '*');
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- 左侧导航栏 -->
+    <div class="sidebar">
+      <div class="logo">图书分析系统</div>
+      <nav>
+        <ul>
+          <li>
+            <span>👤 用户管理</span>
+            <ul>
+              <li><a href="profile-basic.html" target="content-frame">个人资料</a></li>
+              <li><a href="profile-preferences.html" target="content-frame">账户设置</a></li>
+            </ul>
+          </li>
+          <li>
+            <span>📚 图书管理</span>
+            <ul>
+              <li><a href="book-scrape.html" target="content-frame">图书数据爬取</a></li>
+              <li><a href="book-clean.html" target="content-frame">图书数据清洗</a></li>
+              <li><a href="book-analyze.html" target="content-frame">图书信息分析</a></li>
+              <li><a href="book-visualize.html" target="content-frame">图书信息可视化</a></li>
+            </ul>
+          </li>
+          <li>
+            <span>🤖 AI推荐助手</span>
+            <ul>
+              <li><a href="book-recommend.html" target="content-frame">智能图书推荐</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    
+    <!-- 右侧内容区 -->
+    <iframe name="content-frame" class="main-content" src="profile-basic.html" frameborder="0"></iframe>
+  </div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>图书信息分析</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/theme-listener.js"></script>
+</head>
+<body class="iframe-content">
+  <div class="profile-section">
+    <h2>图书信息分析</h2>
+    <div class="form-group">
+      <select id="analysisType">
+        <option value="rating">评分分析</option>
+        <option value="publisher">出版社分析</option>
+        <option value="author">作者分析</option>
+        <option value="category">图书品类分析</option>
+      </select>
+      <button id="analyzeBtn">开始分析</button>
+      <div id="status"></div>
+    </div>
+  </div>
+  <script src="js/book-analyze.js"></script>
+</body>
+</html>
